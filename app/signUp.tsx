@@ -1,114 +1,160 @@
 import React from 'react';
-import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Alert, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
-const SignUpSchema = Yup.object().shape({
+const EmployeeSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
-  password: Yup.string().min(6, 'Password too short').required('Password is required'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password')], 'Passwords must match')
-    .required('Please confirm your password'),
+  position: Yup.string().required('Position is required'),
+  phone: Yup.string().required('Phone is required'),
+  department: Yup.string().required('Department is required'),
 });
 
-export default function SignUpScreen() {
+export default function EmployeeFormScreen() {
   const router = useRouter();
 
   return (
-    <Formik
-      initialValues={{ name: '', email: '', password: '', confirmPassword: '' }}
-      validationSchema={SignUpSchema}
-      onSubmit={(values) => {
-        console.log('Sign Up:', values);
-        router.replace('/');
-      }}
-    >
-      {({ handleChange, handleSubmit, values, errors, touched }) => (
-        <View style={styles.screen}>
+    <View style={styles.screen}>
+      <Text style={styles.title}>Employee Information</Text>
+
+      <Formik
+        initialValues={{
+          name: '',
+          email: '',
+          position: '',
+          phone: '',
+          department: '',
+        }}
+        validationSchema={EmployeeSchema}
+        onSubmit={(values, { resetForm }) => {
+          console.log('Employee Info:', values);
+          Alert.alert('Success', 'Employee data submitted!');
+          resetForm();
+        }}
+      >
+        {({ handleChange, handleSubmit, values, errors, touched }) => (
           <View style={styles.formBox}>
-            <TextInput
-              placeholder="Name"
-              onChangeText={handleChange('name')}
-              value={values.name}
-              style={styles.input}
-            />
+            
+            {/* Name */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="person-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Name"
+                onChangeText={handleChange('name')}
+                value={values.name}
+                style={styles.input}
+              />
+            </View>
             {touched.name && errors.name && <Text style={styles.error}>{errors.name}</Text>}
 
-            <TextInput
-              placeholder="Email"
-              onChangeText={handleChange('email')}
-              value={values.email}
-              style={styles.input}
-              autoCapitalize="none"
-              keyboardType="email-address"
-            />
+            {/* Email */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="mail-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Email"
+                onChangeText={handleChange('email')}
+                value={values.email}
+                style={styles.input}
+                autoCapitalize="none"
+                keyboardType="email-address"
+              />
+            </View>
             {touched.email && errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
-            <TextInput
-              placeholder="Password"
-              secureTextEntry
-              onChangeText={handleChange('password')}
-              value={values.password}
-              style={styles.input}
-            />
-            {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
+            {/* Position */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="briefcase-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Position"
+                onChangeText={handleChange('position')}
+                value={values.position}
+                style={styles.input}
+              />
+            </View>
+            {touched.position && errors.position && <Text style={styles.error}>{errors.position}</Text>}
 
-            <TextInput
-              placeholder="Confirm Password"
-              secureTextEntry
-              onChangeText={handleChange('confirmPassword')}
-              value={values.confirmPassword}
-              style={styles.input}
-            />
-            {touched.confirmPassword && errors.confirmPassword && (
-              <Text style={styles.error}>{errors.confirmPassword}</Text>
-            )}
+            {/* Phone */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="call-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Phone"
+                onChangeText={handleChange('phone')}
+                value={values.phone}
+                style={styles.input}
+                keyboardType="phone-pad"
+              />
+            </View>
+            {touched.phone && errors.phone && <Text style={styles.error}>{errors.phone}</Text>}
+
+            {/* Department */}
+            <View style={styles.inputContainer}>
+              <Ionicons name="business-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Department"
+                onChangeText={handleChange('department')}
+                value={values.department}
+                style={styles.input}
+              />
+            </View>
+            {touched.department && errors.department && <Text style={styles.error}>{errors.department}</Text>}
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit as () => void}>
-              <Text style={styles.buttonText}>Sign Up</Text>
+              <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.secondaryButton} onPress={() => router.push('/')}>
-              <Text style={styles.secondaryButtonText}>Sign In</Text>
+            <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
+              <Text style={styles.backButtonText}>Go to Sign In</Text>
             </TouchableOpacity>
+
           </View>
-        </View>
-      )}
-    </Formik>
+        )}
+      </Formik>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#f4f4f4',
+    paddingTop: 60,
+    alignItems: 'center',
   },
-formBox: {
-  width: '90%',
-  maxWidth: 400,
-  backgroundColor: '#ffffff',
-  borderRadius: 12,
-  padding: 20,
-  borderWidth: 2,
-  borderColor: '#4a90e2',
-  elevation: 4,
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 6,
-},
-
-  input: {
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4a90e2',
+    marginBottom: 20,
+  },
+  formBox: {
+    width: '90%',
+    maxWidth: 400,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    padding: 20,
+    borderWidth: 2,
+    borderColor: '#4a90e2',
+    elevation: 4,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ccc',
     backgroundColor: '#fefefe',
-    padding: 12,
-    marginBottom: 10,
     borderRadius: 6,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 12,
   },
   error: {
     color: 'red',
@@ -117,7 +163,7 @@ formBox: {
   },
   button: {
     backgroundColor: '#4a90e2',
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 6,
     alignItems: 'center',
     marginTop: 10,
@@ -127,25 +173,13 @@ formBox: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  link: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#4a90e2',
-    textAlign: 'center',
+  backButton: {
+    marginTop: 16,
+    alignItems: 'center',
   },
-  secondaryButton: {
-  backgroundColor: '#35e5a1ff',
-  paddingVertical: 14,
-  paddingHorizontal: 16,
-  borderRadius: 6,
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  marginTop: 10,
-},
-secondaryButtonText: {
-  color: '#ffffff',
-  fontSize: 16,
-  fontWeight: '600',
-},
+  backButtonText: {
+    color: '#4a90e2',
+    textDecorationLine: 'underline',
+    fontWeight: '600',
+  },
 });
