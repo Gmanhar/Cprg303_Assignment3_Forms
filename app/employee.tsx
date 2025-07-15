@@ -100,8 +100,8 @@ export default function EmployeeFormScreen() {
               <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
-              <Text style={styles.backButtonText}>Go to Sign In</Text>
+            <TouchableOpacity style={styles.secondaryButton} onPress={() => router.replace('/')}>
+              <Text style={styles.secondaryButtonText}>Go to Sign In</Text>
             </TouchableOpacity>
 
           </View>
@@ -168,13 +168,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  backButton: {
-    marginTop: 16,
-    alignItems: 'center',
-  },
-  backButtonText: {
+link: {
+    marginTop: 12,
+    fontSize: 16,
     color: '#4a90e2',
-    textDecorationLine: 'underline',
-    fontWeight: '600',
+    textAlign: 'center',
   },
+secondaryButton: {
+  backgroundColor: '#35e5a1ff',
+  paddingVertical: 14,
+  paddingHorizontal: 16,
+  borderRadius: 6,
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  marginTop: 10,
+},secondaryButtonText: {
+  color: '#ffffff',
+  fontSize: 16,
+  fontWeight: '600',
+},
 });
