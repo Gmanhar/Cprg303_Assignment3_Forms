@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Formik } from 'formik';
 import React from 'react';
@@ -36,47 +37,63 @@ export default function EmployeeFormScreen() {
       >
         {({ handleChange, handleSubmit, values, errors, touched }) => (
           <View style={styles.formBox}>
-            <TextInput
-              placeholder="Name"
-              onChangeText={handleChange('name')}
-              value={values.name}
-              style={styles.input}
-            />
+            
+            <View style={styles.inputContainer}>
+              <Ionicons name="person-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Name"
+                onChangeText={handleChange('name')}
+                value={values.name}
+                style={styles.input}
+              />
+            </View>
             {touched.name && errors.name && <Text style={styles.error}>{errors.name}</Text>}
 
-            <TextInput
-              placeholder="Email"
-              onChangeText={handleChange('email')}
-              value={values.email}
-              style={styles.input}
-              autoCapitalize="none"
-              keyboardType="email-address"
-            />
+            <View style={styles.inputContainer}>
+              <Ionicons name="mail-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Email"
+                onChangeText={handleChange('email')}
+                value={values.email}
+                style={styles.input}
+                autoCapitalize="none"
+                keyboardType="email-address"
+              />
+            </View>
             {touched.email && errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
-            <TextInput
-              placeholder="Position"
-              onChangeText={handleChange('position')}
-              value={values.position}
-              style={styles.input}
-            />
+            <View style={styles.inputContainer}>
+              <Ionicons name="briefcase-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Position"
+                onChangeText={handleChange('position')}
+                value={values.position}
+                style={styles.input}
+              />
+            </View>
             {touched.position && errors.position && <Text style={styles.error}>{errors.position}</Text>}
 
-            <TextInput
-              placeholder="Phone"
-              onChangeText={handleChange('phone')}
-              value={values.phone}
-              style={styles.input}
-              keyboardType="phone-pad"
-            />
+            <View style={styles.inputContainer}>
+              <Ionicons name="call-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Phone"
+                onChangeText={handleChange('phone')}
+                value={values.phone}
+                style={styles.input}
+                keyboardType="phone-pad"
+              />
+            </View>
             {touched.phone && errors.phone && <Text style={styles.error}>{errors.phone}</Text>}
 
-            <TextInput
-              placeholder="Department"
-              onChangeText={handleChange('department')}
-              value={values.department}
-              style={styles.input}
-            />
+            <View style={styles.inputContainer}>
+              <Ionicons name="business-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <TextInput
+                placeholder="Department"
+                onChangeText={handleChange('department')}
+                value={values.department}
+                style={styles.input}
+              />
+            </View>
             {touched.department && errors.department && <Text style={styles.error}>{errors.department}</Text>}
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit as () => void}>
@@ -84,8 +101,9 @@ export default function EmployeeFormScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
-              <Text style={styles.backButtonText}>Back to Sign In</Text>
+              <Text style={styles.backButtonText}>Go to Sign In</Text>
             </TouchableOpacity>
+
           </View>
         )}
       </Formik>
@@ -116,13 +134,22 @@ const styles = StyleSheet.create({
     borderColor: '#4a90e2',
     elevation: 4,
   },
-  input: {
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: '#ccc',
     backgroundColor: '#fefefe',
-    padding: 12,
-    marginBottom: 10,
     borderRadius: 6,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 12,
   },
   error: {
     color: 'red',
