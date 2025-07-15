@@ -1,6 +1,7 @@
-import React from 'react';
-import { Alert, Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Formik } from 'formik';
+import React from 'react';
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as Yup from 'yup';
 
 const EmployeeSchema = Yup.object().shape({
@@ -12,24 +13,28 @@ const EmployeeSchema = Yup.object().shape({
 });
 
 export default function EmployeeFormScreen() {
+  const router = useRouter();
+
   return (
-    <Formik
-      initialValues={{
-        name: '',
-        email: '',
-        position: '',
-        phone: '',
-        department: '',
-      }}
-      validationSchema={EmployeeSchema}
-      onSubmit={(values, { resetForm }) => {
-        console.log('Employee Info:', values);
-        Alert.alert('Success', 'Employee data submitted!');
-        resetForm();
-      }}
-    >
-      {({ handleChange, handleSubmit, values, errors, touched }) => (
-        <View style={styles.screen}>
+    <View style={styles.screen}>
+      <Text style={styles.title}>Employee Information</Text>
+
+      <Formik
+        initialValues={{
+          name: '',
+          email: '',
+          position: '',
+          phone: '',
+          department: '',
+        }}
+        validationSchema={EmployeeSchema}
+        onSubmit={(values, { resetForm }) => {
+          console.log('Employee Info:', values);
+          Alert.alert('Success', 'Employee data submitted!');
+          resetForm();
+        }}
+      >
+        {({ handleChange, handleSubmit, values, errors, touched }) => (
           <View style={styles.formBox}>
             <TextInput
               placeholder="Name"
@@ -77,19 +82,29 @@ export default function EmployeeFormScreen() {
             <TouchableOpacity style={styles.button} onPress={handleSubmit as () => void}>
               <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
+              <Text style={styles.backButtonText}>Back to Sign In</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-      )}
-    </Formik>
+        )}
+      </Formik>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#f4f4f4',
+    paddingTop: 60,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4a90e2',
+    marginBottom: 20,
   },
   formBox: {
     width: '90%',
@@ -97,11 +112,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 20,
+    borderWidth: 2,
+    borderColor: '#4a90e2',
     elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
   },
   input: {
     borderWidth: 1,
@@ -118,7 +131,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#4a90e2',
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 6,
     alignItems: 'center',
     marginTop: 10,
@@ -127,5 +140,14 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  backButton: {
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  backButtonText: {
+    color: '#4a90e2',
+    textDecorationLine: 'underline',
+    fontWeight: '600',
   },
 });
