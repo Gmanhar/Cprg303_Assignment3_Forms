@@ -1,44 +1,35 @@
-import React from 'react';
-import { Alert, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { Formik } from 'formik';
+import React from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import * as Yup from 'yup';
 
-const EmployeeSchema = Yup.object().shape({
+const SignUpSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
-  position: Yup.string().required('Position is required'),
-  phone: Yup.string().required('Phone is required'),
-  department: Yup.string().required('Department is required'),
+  password: Yup.string().min(6, 'Password too short').required('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Please confirm your password'),
 });
 
-export default function EmployeeFormScreen() {
+export default function SignUpScreen() {
   const router = useRouter();
 
   return (
-    <View style={styles.screen}>
-      <Text style={styles.title}>Employee Information</Text>
-
-      <Formik
-        initialValues={{
-          name: '',
-          email: '',
-          position: '',
-          phone: '',
-          department: '',
-        }}
-        validationSchema={EmployeeSchema}
-        onSubmit={(values, { resetForm }) => {
-          console.log('Employee Info:', values);
-          Alert.alert('Success', 'Employee data submitted!');
-          resetForm();
-        }}
-      >
-        {({ handleChange, handleSubmit, values, errors, touched }) => (
+    <Formik
+      initialValues={{ name: '', email: '', password: '', confirmPassword: '' }}
+      validationSchema={SignUpSchema}
+      onSubmit={(values) => {
+        console.log('Sign Up:', values);
+        router.replace('/');
+      }}
+    >
+      {({ handleChange, handleSubmit, values, errors, touched }) => (
+        <View style={styles.screen}>
           <View style={styles.formBox}>
             
-            {/* Name */}
             <View style={styles.inputContainer}>
               <Ionicons name="person-outline" size={20} color="#4a90e2" style={styles.icon} />
               <TextInput
@@ -50,7 +41,6 @@ export default function EmployeeFormScreen() {
             </View>
             {touched.name && errors.name && <Text style={styles.error}>{errors.name}</Text>}
 
-            {/* Email */}
             <View style={styles.inputContainer}>
               <Ionicons name="mail-outline" size={20} color="#4a90e2" style={styles.icon} />
               <TextInput
@@ -64,70 +54,53 @@ export default function EmployeeFormScreen() {
             </View>
             {touched.email && errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
-            {/* Position */}
             <View style={styles.inputContainer}>
-              <Ionicons name="briefcase-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <Ionicons name="lock-closed-outline" size={20} color="#4a90e2" style={styles.icon} />
               <TextInput
-                placeholder="Position"
-                onChangeText={handleChange('position')}
-                value={values.position}
+                placeholder="Password"
+                secureTextEntry
+                onChangeText={handleChange('password')}
+                value={values.password}
                 style={styles.input}
               />
             </View>
-            {touched.position && errors.position && <Text style={styles.error}>{errors.position}</Text>}
+            {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
 
-            {/* Phone */}
             <View style={styles.inputContainer}>
-              <Ionicons name="call-outline" size={20} color="#4a90e2" style={styles.icon} />
+              <Ionicons name="lock-closed-outline" size={20} color="#4a90e2" style={styles.icon} />
               <TextInput
-                placeholder="Phone"
-                onChangeText={handleChange('phone')}
-                value={values.phone}
-                style={styles.input}
-                keyboardType="phone-pad"
-              />
-            </View>
-            {touched.phone && errors.phone && <Text style={styles.error}>{errors.phone}</Text>}
-
-            {/* Department */}
-            <View style={styles.inputContainer}>
-              <Ionicons name="business-outline" size={20} color="#4a90e2" style={styles.icon} />
-              <TextInput
-                placeholder="Department"
-                onChangeText={handleChange('department')}
-                value={values.department}
+                placeholder="Confirm Password"
+                secureTextEntry
+                onChangeText={handleChange('confirmPassword')}
+                value={values.confirmPassword}
                 style={styles.input}
               />
             </View>
-            {touched.department && errors.department && <Text style={styles.error}>{errors.department}</Text>}
+            {touched.confirmPassword && errors.confirmPassword && (
+              <Text style={styles.error}>{errors.confirmPassword}</Text>
+            )}
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit as () => void}>
-              <Text style={styles.buttonText}>Submit</Text>
+              <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
-              <Text style={styles.backButtonText}>Go to Sign In</Text>
+            <TouchableOpacity style={styles.secondaryButton} onPress={() => router.push('/')}>
+              <Text style={styles.secondaryButtonText}>Sign In</Text>
             </TouchableOpacity>
 
           </View>
-        )}
-      </Formik>
-    </View>
+        </View>
+      )}
+    </Formik>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
-    paddingTop: 60,
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#4a90e2',
-    marginBottom: 20,
+    backgroundColor: '#f4f4f4',
   },
   formBox: {
     width: '90%',
@@ -163,7 +136,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#4a90e2',
-    paddingVertical: 14,
+    paddingVertical: 12,
     borderRadius: 6,
     alignItems: 'center',
     marginTop: 10,
@@ -173,13 +146,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  backButton: {
-    marginTop: 16,
+  secondaryButton: {
+    backgroundColor: '#35e5a1ff',
+    paddingVertical: 14,
+    borderRadius: 6,
     alignItems: 'center',
+    marginTop: 10,
   },
-  backButtonText: {
-    color: '#4a90e2',
-    textDecorationLine: 'underline',
+  secondaryButtonText: {
+    color: '#fff',
+    fontSize: 16,
     fontWeight: '600',
   },
 });
