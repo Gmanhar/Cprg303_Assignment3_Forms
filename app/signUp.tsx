@@ -18,18 +18,20 @@ export default function SignUpScreen() {
   const router = useRouter();
 
   return (
-    <Formik
-      initialValues={{ name: '', email: '', password: '', confirmPassword: '' }}
-      validationSchema={SignUpSchema}
-      onSubmit={(values) => {
-        console.log('Sign Up:', values);
-        router.replace('/');
-      }}
-    >
-      {({ handleChange, handleSubmit, values, errors, touched }) => (
-        <View style={styles.screen}>
+    <View style={styles.screen}>
+      <Text style={styles.title}>Sign Up</Text>
+
+      <Formik
+        initialValues={{ name: '', email: '', password: '', confirmPassword: '' }}
+        validationSchema={SignUpSchema}
+        onSubmit={(values) => {
+          console.log('Sign Up:', values);
+          router.replace('/');
+        }}
+      >
+        {({ handleChange, handleSubmit, values, errors, touched }) => (
           <View style={styles.formBox}>
-            
+
             <View style={styles.inputContainer}>
               <Ionicons name="person-outline" size={20} color="#4a90e2" style={styles.icon} />
               <TextInput
@@ -80,7 +82,7 @@ export default function SignUpScreen() {
               <Text style={styles.error}>{errors.confirmPassword}</Text>
             )}
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit as () => void}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
 
@@ -89,9 +91,9 @@ export default function SignUpScreen() {
             </TouchableOpacity>
 
           </View>
-        </View>
-      )}
-    </Formik>
+        )}
+      </Formik>
+    </View>
   );
 }
 
@@ -101,6 +103,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f4f4f4',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#4a90e2',
+    marginBottom: 20,
   },
   formBox: {
     width: '90%',
@@ -136,7 +144,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#4a90e2',
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 6,
     alignItems: 'center',
     marginTop: 10,
@@ -144,10 +152,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   secondaryButton: {
-    backgroundColor: '#35e5a1ff',
+    backgroundColor: '#35e5a1',
     paddingVertical: 14,
     borderRadius: 6,
     alignItems: 'center',

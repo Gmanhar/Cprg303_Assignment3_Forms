@@ -14,18 +14,19 @@ export default function SignInScreen() {
   const router = useRouter();
 
   return (
-    <Formik
-      initialValues={{ email: '', password: '' }}
-      validationSchema={SignInSchema}
-      onSubmit={(values) => {
-        console.log('Sign In:', values);
-        router.replace('/employee');
-      }}
-    >
-      {({ handleChange, handleSubmit, values, errors, touched }) => (
-        <View style={styles.screen}>
-          <View style={styles.formBox}>
+    <View style={styles.screen}>
+      <Text style={styles.title}>Sign In</Text>
 
+      <Formik
+        initialValues={{ email: '', password: '' }}
+        validationSchema={SignInSchema}
+        onSubmit={(values) => {
+          console.log('Sign In:', values);
+          router.replace('/employee');
+        }}
+      >
+        {({ handleChange, handleSubmit, values, errors, touched }) => (
+          <View style={styles.formBox}>
             <View style={styles.inputContainer}>
               <Ionicons name="mail-outline" size={20} color="#4a90e2" style={styles.icon} />
               <TextInput
@@ -51,18 +52,17 @@ export default function SignInScreen() {
             </View>
             {touched.password && errors.password && <Text style={styles.error}>{errors.password}</Text>}
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit as () => void}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.secondaryButton} onPress={() => router.push('/signUp')}>
               <Text style={styles.secondaryButtonText}>Sign Up</Text>
             </TouchableOpacity>
-
           </View>
-        </View>
-      )}
-    </Formik>
+        )}
+      </Formik>
+    </View>
   );
 }
 
@@ -72,6 +72,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f4f4f4',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#4a90e2',
+    marginBottom: 20,
   },
   formBox: {
     width: '90%',
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   secondaryButton: {
-    backgroundColor: '#35e5a1ff',
+    backgroundColor: '#35e5a1',
     paddingVertical: 14,
     borderRadius: 6,
     alignItems: 'center',
